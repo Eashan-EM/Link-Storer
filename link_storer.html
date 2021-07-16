@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Link Storer</title>
+	<style>
+		body {
+			background: linear-gradient(70deg, aquamarine,cyan);
+			font-family: Monospace ;
+		}
+		table,th,tr,td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			text-align: center;
+		}
+		.input {
+			border-radius:30px;
+			background-color: #0ff0ff;
+			border: 1px solid black;
+			height: 24px;
+			font-family: Monospace;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<input class="input" type="button" value="Add Link" onClick="AL()"/>
+		<input class="input" type="button" value="Change Link" onClick="CL()"/>
+		<input class="input" type="button" value="Delete Link" onClick="DL()"/>
+	</div>
+	<br>
+	<table style="width:100%;">
+  	<tr>
+    	<th>Class</th>
+    	<th colspan="2">Meet Links</th>
+  	</tr>
+  	</div>
+  </table>
+  <table id="storer" style="width:100%;">
+  </table>
+  <script>
+  	if (localStorage.getItem("classes.json")!=null) {
+  					var classes = JSON.parse(localStorage.getItem("classes.json"));
+  					for (var i in classes) {
+  									adder(i,classes[i]);
+  					}
+  	} else {
+  					var classes = {};
+  	   	localStorage.setItem("classes.json",JSON.stringify(classes));
+  	}
+  	function save() {
+  					localStorage.setItem("classes.json",JSON.stringify(classes));
+  	}
+  	function AL() {
+  		var link = prompt("Enter Link");
+  		var class_name = prompt("Enter Class Name");
+  		if (link!=""&&class_name!="") {
+  			adder(class_name,link);
+  			save();
+  		} else {
+  				alert("Link or Class name not given");
+  		} 
+  	}
+  	function adder(class_name,link) {
+  		var storer = document.getElementById("storer");
+  		var new_tr = document.createElement("tr");
+  	new_tr.setAttribute("id",class_name);
+  		var add_name = document.createElement("td");
+  		add_name.innerHTML = class_name;
+  		new_tr.appendChild(add_name);
+  		var add_link = document.createElement("a");
+  		add_link.href = link;
+  		add_link.innerHTML = link;
+  		new_td = document.createElement("td");
+  		new_td.appendChild(add_link);
+  		new_tr.appendChild(new_td);
+  		storer.appendChild(new_tr);
+  		classes[class_name] = link;
+  	}
+  	function CL() {
+  					var class_name = prompt("Enter Class Name");
+  					if (class_name in classes) {
+  									var link = prompt("Enter New Link");
+  									var change = document.getElementById(class_name);
+  									var int = change.lastChild;
+  									var into = int.lastChild;
+  									into.href = link;
+  									into.innerHTML = link;
+  									classes[class_name] = link;
+  									save();
+  					 } else {
+  					 				alert("Class Not Found");
+  					 	}
+  			}
+  	function DL() {
+  			var class_name = prompt("Enter Exact Class Name");
+  		if (class_name in classes) {
+  			var erase  = document.getElementById(class_name);
+  			erase.remove();
+  			delete classes[class_name];
+  			save();
+  		} else {
+  				alert("No Classes found");
+  		}
+  }
+  </script>
+</body>
+</html>
